@@ -2,12 +2,15 @@ package nl.hu.sd.tennis.application;
 
 import nl.hu.sd.tennis.data.MatchRepository;
 import nl.hu.sd.tennis.domain.Match;
+import nl.hu.sd.tennis.domain.MatchStatus;
 import nl.hu.sd.tennis.domain.Player;
 import nl.hu.sd.tennis.domain.Score;
+import nl.hu.sd.tennis.domain.exceptions.MatchIsOverException;
 import nl.hu.sd.tennis.domain.exceptions.MatchNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -26,6 +29,10 @@ public class MatchService {
         return match;
     }
 
+    public List<Match> findAllMatches(){
+        return matchRepository.findAll();
+    }
+
     public Match startNewMatch(Long p1id, Long p2id){
         Match match = new Match();
         Player p1 = playerService.findPlayer(p1id);
@@ -38,6 +45,9 @@ public class MatchService {
 
     public Match increaseScore(Long matchId, Long playerId){
         Match match = findMatch(matchId);
+        if (match.getStatus().equals(MatchStatus.OVER)){
+            throw new MatchIsOverException("The match is over!");
+        }
         Player player = playerService.findPlayer(playerId);
         Player otherPlayer;
 
@@ -62,7 +72,23 @@ public class MatchService {
         }
 
         if (player.getScore() == Score.ZERO){
+            player.winGame();
             otherPlayer.setScore(Score.ZERO);
+
+
+            // If a player has won at least 6 games with a difference of 2
+            if (player.getGamesWon() >= 6 &&
+                    (player.getGamesWon() - otherPlayer.getGamesWon()) > 1){
+
+                otherPlayer.setGamesWon(0);
+                player.winSet();                // The player wins a set
+
+                // If the player has won 2 sets, the player wins the match
+                if (player.getSetsWon() == 2){
+                    player.winMatch();
+                    match.setStatus(MatchStatus.OVER);
+                }
+            }
         }
 
         playerService.savePlayer(player);

@@ -2,11 +2,14 @@ package nl.hu.sd.tennis.presentation;
 
 import nl.hu.sd.tennis.application.MatchService;
 import nl.hu.sd.tennis.domain.Match;
+import nl.hu.sd.tennis.domain.exceptions.MatchIsOverException;
 import nl.hu.sd.tennis.domain.exceptions.MatchNotFoundException;
 import nl.hu.sd.tennis.domain.exceptions.PlayerNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tennis")
@@ -26,6 +29,11 @@ public class MatchController {
         }
     }
 
+    @GetMapping("/match")
+    public List<Match> findAllMatches(){
+        return this.matchService.findAllMatches();
+    }
+
     @GetMapping("/match/{id}")
     public Match getMatch(@PathVariable Long id){
         try {
@@ -41,6 +49,8 @@ public class MatchController {
             return this.matchService.increaseScore(matchId, playerId);
         } catch (PlayerNotFoundException | MatchNotFoundException exception){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+        } catch (MatchIsOverException exception){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
     }
 }

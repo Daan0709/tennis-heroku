@@ -9,6 +9,10 @@ public class Player {
     private Long id;
     private String name;
     private int matchesWon = 0;
+
+    private int gamesWon = 0;
+
+    private int setsWon = 0;
     @Enumerated(EnumType.STRING)
     private Score score;
 
@@ -59,5 +63,35 @@ public class Player {
 
     public int getMatchesWon() {
         return matchesWon;
+    }
+
+    public int getGamesWon(){
+        return gamesWon;
+    }
+
+    public void setGamesWon(int games){
+        this.gamesWon = games;
+    }
+
+    public int getSetsWon() {
+        return setsWon;
+    }
+
+    public void setSetsWon(int setsWon) {
+        this.setsWon = setsWon;
+    }
+
+    public void winMatch(){
+        this.matchesWon++;
+        this.setsWon = 0;
+    }
+
+    public void winGame(){
+        this.gamesWon++;
+    }
+
+    public void winSet(){
+        this.gamesWon = 0;
+        this.setsWon++;
     }
 }
