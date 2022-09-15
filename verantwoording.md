@@ -27,3 +27,9 @@ De code die ik heb geschreven is over het algemeen vrij netjes. Functies hebben 
 Wel zou ik wat meer commentaar tussen de code hebben kunnen neerzetten, zodat alles goed opgepakt zou kunnen worden door andere developers en, met wat meer tijd, had ik mijn code wat kunnen optimaliseren. 
 Een functie in MatchService (increaseScore()) is nu bijvoorbeeld een erg lange functie wat ik had kunnen opsplitsen in meerdere kleinere functies om duidelijkheid te vergroten. 
 
+## Verbeteringen
+De verbeteringen aan mijn applicatie zijn vrij eenvoudig, ik heb tests geschreven. Dit is uiteraard van belang
+bij het bijhouden van de kwaliteit van jouw code. Zolang de tests blijven slagen weet ik vrij zeker dat ik niks kapot heb gemaakt,
+en kan ik ervan uitgaan dat de code werkt zoals ik hem bedoeld heb. Ik heb ook geprobeerd service integration tests te maken, maar 
+hier kwam ik zo snel even niet uit vanwege Transient exceptions bij nog niet opgeslagen spelers.
+

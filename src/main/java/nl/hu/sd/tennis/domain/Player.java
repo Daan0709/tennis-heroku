@@ -14,7 +14,7 @@ public class Player {
 
     private int setsWon = 0;
     @Enumerated(EnumType.STRING)
-    private Score score;
+    private Score score = Score.ZERO;
 
     public Player(String name){
         this.name = name;
@@ -93,5 +93,9 @@ public class Player {
     public void winSet(){
         this.gamesWon = 0;
         this.setsWon++;
+
+        if (this.setsWon == 2){
+            this.winMatch();
+        }
     }
 }
